@@ -55,8 +55,6 @@ La instalación se realiza en tres pasos secuenciales:
 - `name`: Nombre de la ciudad
 - `state`: Estado/Provincia/Región
 - `postal_code`: Código postal
-- `latitude`: Latitud
-- `longitude`: Longitud
 
 ## 🔍 Ejemplos de Uso
 
