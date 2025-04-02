@@ -1,99 +1,93 @@
--- SQL Script to insert a representative sample of significant cities and towns for Norway (NO).
+-- SQL Script to insert a representative sample of significant cities and towns for Oman (OM).
 -- Run this AFTER creating the world_cities table.
--- Assumes the world_countries table is populated and contains Norway (NO).
--- NOTE: Excludes Svalbard and Jan Mayen.
+-- Assumes the world_countries table is populated and contains Oman (OM).
 
--- NOTE: Norway has numerous municipalities and smaller localities (tettsteder). This list includes the capital,
--- major cities, county administrative centers, and significant towns. Listing every single locality is IMPOSSIBLE.
--- Postal codes are 4 digits; examples or '0000' placeholder are provided.
+-- NOTE: Oman has governorates and wilayats with numerous settlements. This list includes the capital,
+-- governorate/wilayat centers, and significant towns. Listing every single village is IMPOSSIBLE.
+-- Postal codes are 3 digits; examples or '000' placeholder are provided.
 
--- Inserting cities for Norway (NO) using a subquery for country_id
+-- Inserting cities for Oman (OM) using a subquery for country_id
 INSERT INTO public.world_cities (name, country_id, postal_code) VALUES
--- Capital & Major Cities / County Admin Centers (Fylkeshovedstad - approx.)
-('Oslo', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '0101'), -- National Capital & Oslo County
-('Bergen', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '5003'), -- Vestland County (Largest city)
-('Stavanger', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '4001'), -- Rogaland County Capital (part of Stavanger/Sandnes metro)
-('Trondheim', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '7010'), -- Trøndelag County Capital
-('Drammen', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3001'), -- Buskerud County Capital (Viken before/after?)
-('Skien', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3701'), -- Telemark County Capital (Vestfold og Telemark before/after?)
-('Kristiansand', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '4601'), -- Agder County Capital
-('Tromsø', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '9008'), -- Troms County Capital (Troms og Finnmark before/after?)
-('Ålesund', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '6001'), -- Møre og Romsdal County (Major city)
-('Tønsberg', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3101'), -- Vestfold County Capital (Vestfold og Telemark before/after?)
-('Moss', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '1501'), -- Østfold County (Viken before/after?) (Sarpsborg also admin center)
-('Haugesund', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '5501'), -- Rogaland County
-('Sandefjord', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3201'), -- Vestfold County (Large town)
-('Arendal', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '4801'), -- Agder County (Admin center with Kristiansand)
-('Bodø', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '8001'), -- Nordland County Capital
-('Fredrikstad', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '1601'), -- Østfold County (Viken before/after?)
-('Sarpsborg', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '1701'), -- Østfold County Capital (Viken before/after?)
-('Hamar', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '2301'), -- Innlandet County Capital
-('Larvik', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3251'), -- Vestfold County
-('Halden', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '1751'), -- Østfold County (Viken before/after?)
-('Lillehammer', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '2601'), -- Innlandet County (Major town, Winter Olympics '94)
-('Molde', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '6401'), -- Møre og Romsdal County Capital
-('Kristiansund', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '6501'), -- Møre og Romsdal County
-('Harstad', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '9401'), -- Troms County (Troms og Finnmark before/after?)
-('Gjøvik', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '2801'), -- Innlandet County Capital
-('Horten', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3181'), -- Vestfold County
-('Steinkjer', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '7701'), -- Trøndelag County (Admin center with Trondheim)
-('Kongsberg', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3601'), -- Buskerud County (Viken before/after?)
-('Vadsø', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '9800'), -- Finnmark County Capital (Troms og Finnmark before/after?)
-('Førde', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '6800'), -- Vestland County (Former Sogn og Fjordane capital)
-('Leikanger / Hermansverk', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '6863'), -- Vestland County (Former Sogn og Fjordane capital)
-('Alta', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '9501'), -- Finnmark County (Troms og Finnmark before/after?)
-('Mo i Rana', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '8601'), -- Nordland County (Industrial town)
-('Porsgrunn', (SELECT id FROM world_countries WHERE iso_code_2 = 'NO'), '3901'); -- Telemark County (Vestfold og Telemark before/after?)
+-- Capital & Governorate Capitals / Major Wilayat Centers / Major Cities
+('Muscat (Masqat)', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '100'), -- National Capital (Muscat Governorate)
+('Salalah', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '211'), -- Dhofar Governorate Capital
+('Sohar', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '311'), -- North Al Batinah Governorate Capital
+('Nizwa', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '611'), -- Ad Dakhiliyah Governorate (Major historical city)
+('Sur', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '411'), -- South Ash Sharqiyah Governorate Capital
+('Ibri', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '511'), -- Ad Dhahirah Governorate Capital
+('Rustaq', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '329'), -- South Al Batinah Governorate Capital
+('Buraimi', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '512'), -- Al Buraimi Governorate Capital
+('Khasab', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '811'), -- Musandam Governorate Capital
+('Ibra', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '400'), -- North Ash Sharqiyah Governorate Capital
+('Haima', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '711'), -- Al Wusta Governorate Capital
 
--- End of Norway city list (Representative Sample of Mainland Norway)
+-- Other Significant Towns (Sample)
+('Seeb', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '121'), -- Muscat Governorate (Large town near Muscat)
+('Bawshar (Bausher)', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '130'), -- Muscat Governorate (Part of Muscat metro)
+('Saham', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '317'), -- North Al Batinah Governorate
+('Barka', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '320'), -- South Al Batinah Governorate
+('Shinas', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '324'), -- North Al Batinah Governorate
+('Suwayq (As Suwayq)', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '315'), -- North Al Batinah Governorate
+('Bahla', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '613'), -- Ad Dakhiliyah Governorate (UNESCO site - fort)
+('Samail', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '621'), -- Ad Dakhiliyah Governorate
+('Adam', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '612'), -- Ad Dakhiliyah Governorate
+('Qurayyat', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '117'), -- Muscat Governorate (Coastal town)
+('Bidbid', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '620'), -- Ad Dakhiliyah Governorate
+('Izki', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '615'), -- Ad Dakhiliyah Governorate
+('Al Khaburah', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '326'), -- North Al Batinah Governorate
+('Liwa', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '327'), -- North Al Batinah Governorate
+('Jalan Bani Bu Ali', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '414'), -- South Ash Sharqiyah Governorate
+('Duqm', (SELECT id FROM world_countries WHERE iso_code_2 = 'OM'), '712'); -- Al Wusta Governorate (Developing port/economic zone)
+
+-- End of Oman city list (Representative Sample)
 
 /*
 -- ====================================
--- == Información sobre Norway ==
+-- == Información sobre Oman ==
 -- ====================================
 --
 -- Descripción General:
--- Noruega (Norway) es un país nórdico ubicado en el norte de Europa, ocupando la
--- parte occidental de la Península Escandinava. Limita con Suecia al este, Finlandia
--- y Rusia al noreste, y tiene una extensa costa a lo largo del Océano Atlántico Norte
--- (incluyendo el Mar de Noruega y el Mar de Barents), famosa por sus profundos fiordos.
--- El país es muy montañoso. El Reino de Noruega también incluye los territorios árticos
--- de Svalbard y Jan Mayen (excluidos de esta entrada 'NO') y la Isla Bouvet en el
--- Atlántico Sur. Es una monarquía constitucional parlamentaria.
+-- El Sultanato de Omán es un país ubicado en el extremo sureste de la Península
+-- Arábiga, en Asia Occidental (Oriente Medio). Limita con los Emiratos Árabes Unidos
+-- al noroeste, Arabia Saudita al oeste y Yemen al suroeste. Tiene una larga costa
+-- en el Mar Arábigo al sur y este, y en el Golfo de Omán al noreste. También incluye
+-- los exclaves de Madha y Musandam (separado por territorio emiratí, controla el
+-- estratégico Estrecho de Ormuz junto con Irán). Su geografía incluye una llanura
+-- costera, cadenas montañosas (Montañas Al Hajar) y un vasto interior desértico.
+-- Es un sultanato absoluto.
 --
 -- Ciudades Principales:
--- * Oslo: La capital y ciudad más grande, ubicada al final del Fiordo de Oslo.
--- * Bergen: La segunda ciudad más grande, importante centro histórico (liga Hanseática)
---   y puerta de entrada a los fiordos occidentales. Su muelle Bryggen es Patrimonio
---   de la Humanidad.
--- * Stavanger/Sandnes: Tercera área urbana, centro de la industria petrolera noruega.
--- * Trondheim: Tercera ciudad individualmente, centro tecnológico e histórico (Catedral
---   de Nidaros).
--- * Drammen, Skien, Kristiansand, Tromsø (importante ciudad ártica): Otras ciudades
---   significativas y centros regionales/administrativos.
--- * La lista incluye también las principales ciudades de cada condado (fylke) y otros
---   pueblos importantes. (Nota: Hubo reformas de condados recientes, algunos nombres
---   pueden referirse a entidades anteriores/posteriores a 2020/2024).
+-- * Mascate (Muscat): La capital y ciudad más grande, ubicada en la costa del Golfo
+--   de Omán. Es el centro político y económico.
+-- * Salalah: La segunda ciudad más grande, capital de la gobernación sureña de Dhofar,
+--   conocida por su clima monzónico (khareef).
+-- * Sohar: Importante ciudad industrial y portuaria en la costa norte de Al Batinah.
+-- * Nizwa: Antigua capital y centro histórico y cultural en el interior, al pie de
+--   las montañas Al Hajar.
+-- * Sur: Ciudad costera en el este, históricamente famosa por la construcción de barcos (dhows).
+-- * Ibri, Rustaq, Buraimi, Khasab (en el exclave de Musandam), Ibra, Haima: Capitales
+--   de las demás gobernaciones (muhafazat) o centros importantes.
+-- * Seeb y Bawshar: Grandes suburbios/ciudades dentro del área metropolitana de Mascate.
+-- * La lista incluye también otros pueblos significativos.
 --
 -- Un Poco de Historia:
--- Habitada desde la Edad de Piedra. La Era Vikinga (siglos VIII-XI) vio a los
--- noruegos explorar, comerciar y colonizar extensas áreas (Islandia, Groenlandia,
--- partes de Gran Bretaña, Irlanda, Normandía). Noruega fue unificada como reino
--- alrededor del siglo IX/X. Formó parte de la Unión de Kalmar con Dinamarca y Suecia
--- (1397-1523), y luego permaneció unida a Dinamarca durante siglos. En 1814, tras
--- las guerras napoleónicas, Noruega fue cedida a Suecia, aunque logró establecer su
--- propia constitución. Formó una unión personal con Suecia hasta que obtuvo la plena
--- independencia pacíficamente en 1905, estableciéndose como monarquía. Fue neutral
--- en la Primera Guerra Mundial pero ocupada por Alemania en la Segunda. Después de la
--- guerra, se convirtió en un próspero estado de bienestar, especialmente tras el
--- descubrimiento de petróleo y gas en el Mar del Norte en los años 60. Noruega ha
--- votado dos veces en referéndum en contra de unirse a la Unión Europea, pero es
--- miembro del Espacio Económico Europeo (EEE) y de la OTAN.
+-- La región tiene una historia antigua como centro de comercio marítimo (posiblemente
+-- el Magan sumerio). Fue uno de los primeros lugares en adoptar el Islam. Omán
+-- desarrolló una forma particular del Islam, el ibadismo, que sigue siendo dominante.
+-- Estableció un imperio marítimo importante entre los siglos XVII y XIX, que controlaba
+-- Zanzíbar y otras posesiones en África Oriental y el Océano Índico. Tuvo una estrecha
+-- relación (y periodos de influencia) con Gran Bretaña, aunque nunca fue formalmente
+-- una colonia. El largo reinado del Sultán Said bin Taimur (hasta 1970) se caracterizó
+-- por el aislamiento. Su hijo, el Sultán Qaboos bin Said, lo depuso en 1970 e inició
+-- un período de modernización y desarrollo radical impulsado por los ingresos del
+-- petróleo, manteniendo al mismo tiempo la estabilidad política. Tras la muerte de
+-- Qaboos en 2020, fue sucedido por su primo Haitham bin Tariq.
 --
 -- Datos Adicionales:
--- El noruego (bokmål y nynorsk) es el idioma oficial; el sami también es oficial en
--- algunas áreas. Noruega es famosa por sus fiordos espectaculares, la aurora boreal,
--- los deportes de invierno (esquí), su industria pesquera y petrolera, y su alto
--- nivel de vida.
+-- El árabe es el idioma oficial. El Islam (predominantemente ibadí) es la religión
+-- del estado. Omán es conocido por sus paisajes naturales (wadis, montañas, desiertos,
+-- costas), sus fuertes históricos (Nizwa, Bahla - Patrimonio de la Humanidad), el
+-- incienso (originario de Dhofar) y los "fiordos" de Musandam. Ha mantenido una
+-- política exterior relativamente neutral en la región.
 --
 */
