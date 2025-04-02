@@ -92,7 +92,6 @@ Las contribuciones son bienvenidas. Por favor, asegúrate de:
 ## 📝 Notas
 
 - Los códigos postales pueden variar según el país y no están disponibles para todas las ciudades
-- Las coordenadas geográficas (latitud/longitud) están en formato decimal
 - Algunos países pueden tener diferentes divisiones administrativas (estados, provincias, regiones, etc.)
 
 ## 📄 Licencia
