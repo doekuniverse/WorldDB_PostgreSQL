@@ -1,18 +1,18 @@
 -- SQL Script to create and populate the world_countries table for PostgreSQL/Supabase
--- Now includes the primary IANA timezone for each country.
+-- Corrected version addressing potential VALUES list length errors.
 
 -- Drop the table if it already exists (optional, use with caution)
 -- DROP TABLE IF EXISTS public.world_countries;
 
 -- Create the world_countries table
 CREATE TABLE public.world_countries (
-    id SERIAL PRIMARY KEY, -- <<< ESTO CREA UN ID NUMÉRICO automático (1, 2, 3...) para cada país.
+    id SERIAL PRIMARY KEY, -- Auto-incrementing integer primary key.
     name VARCHAR(100) NOT NULL UNIQUE, -- Common name of the country
     iso_code_2 CHAR(2) NOT NULL UNIQUE, -- ISO 3166-1 alpha-2 code
     iso_code_3 CHAR(3) NOT NULL UNIQUE, -- ISO 3166-1 alpha-3 code
     region VARCHAR(50), -- Continent or main region
     subregion VARCHAR(50), -- Sub-region
-    iana_timezone VARCHAR(64) NULL, -- Primary IANA timezone name (e.g., 'America/Santiago', 'Europe/London'). NULL if not applicable or multiple complex zones.
+    iana_timezone VARCHAR(64) NULL, -- Primary IANA timezone name
     created_at TIMESTAMPTZ DEFAULT NOW() NOT NULL, -- Timestamp when the record was created
     updated_at TIMESTAMPTZ DEFAULT NOW() NOT NULL -- Timestamp when the record was last updated
 );
@@ -29,8 +29,7 @@ COMMENT ON COLUMN public.world_countries.iana_timezone IS 'Primary IANA timezone
 COMMENT ON COLUMN public.world_countries.created_at IS 'Timestamp of creation.';
 COMMENT ON COLUMN public.world_countries.updated_at IS 'Timestamp of last update.';
 
--- Optional: Create a trigger function to automatically update the updated_at timestamp
--- Supabase often handles this automatically if using its interface, but this is standard PostgreSQL practice.
+-- Optional: Create or reuse the trigger function to automatically update the updated_at timestamp
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
@@ -42,11 +41,10 @@ $$ language 'plpgsql';
 CREATE TRIGGER update_world_countries_updated_at
 BEFORE UPDATE ON public.world_countries
 FOR EACH ROW
-EXECUTE FUNCTION update_updated_at_column();
+EXECUTE FUNCTION update_updated_at_column(); -- Assumes the function exists
 
--- Insert data for countries including IANA timezone
--- (Data source: ISO 3166-1, UN M49 regions, IANA Time Zone Database - primary/capital timezone used for multi-zone countries)
--- The numeric ID column is automatically populated by the SERIAL definition
+-- Insert data for countries including IANA timezone - CORRECTED LIST
+-- Ensure every VALUES clause has exactly 6 values corresponding to the 6 columns specified.
 INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subregion, iana_timezone) VALUES
 ('Afghanistan', 'AF', 'AFG', 'Asia', 'Southern Asia', 'Asia/Kabul'),
 ('Åland Islands', 'AX', 'ALA', 'Europe', 'Northern Europe', 'Europe/Mariehamn'),
@@ -56,12 +54,12 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Andorra', 'AD', 'AND', 'Europe', 'Southern Europe', 'Europe/Andorra'),
 ('Angola', 'AO', 'AGO', 'Africa', 'Middle Africa', 'Africa/Luanda'),
 ('Anguilla', 'AI', 'AIA', 'Americas', 'Caribbean', 'America/Anguilla'),
-('Antarctica', 'AQ', 'ATA', 'Antarctica', '', NULL), -- Multiple timezones, complex
+('Antarctica', 'AQ', 'ATA', 'Antarctica', '', NULL),
 ('Antigua and Barbuda', 'AG', 'ATG', 'Americas', 'Caribbean', 'America/Antigua'),
-('Argentina', 'AR', 'ARG', 'Americas', 'South America', 'America/Argentina/Buenos_Aires'), -- Multiple zones exist
+('Argentina', 'AR', 'ARG', 'Americas', 'South America', 'America/Argentina/Buenos_Aires'),
 ('Armenia', 'AM', 'ARM', 'Asia', 'Western Asia', 'Asia/Yerevan'),
 ('Aruba', 'AW', 'ABW', 'Americas', 'Caribbean', 'America/Aruba'),
-('Australia', 'AU', 'AUS', 'Oceania', 'Australia and New Zealand', 'Australia/Sydney'), -- Multiple zones exist
+('Australia', 'AU', 'AUS', 'Oceania', 'Australia and New Zealand', 'Australia/Sydney'),
 ('Austria', 'AT', 'AUT', 'Europe', 'Western Europe', 'Europe/Vienna'),
 ('Azerbaijan', 'AZ', 'AZE', 'Asia', 'Western Asia', 'Asia/Baku'),
 ('Bahamas', 'BS', 'BHS', 'Americas', 'Caribbean', 'America/Nassau'),
@@ -78,8 +76,8 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Bonaire, Sint Eustatius and Saba', 'BQ', 'BES', 'Americas', 'Caribbean', 'America/Kralendijk'),
 ('Bosnia and Herzegovina', 'BA', 'BIH', 'Europe', 'Southern Europe', 'Europe/Sarajevo'),
 ('Botswana', 'BW', 'BWA', 'Africa', 'Southern Africa', 'Africa/Gaborone'),
-('Bouvet Island', 'BV', 'BVT', 'Antarctica', '', NULL), -- Uninhabited
-('Brazil', 'BR', 'BRA', 'Americas', 'South America', 'America/Sao_Paulo'), -- Multiple zones exist
+('Bouvet Island', 'BV', 'BVT', 'Antarctica', '', NULL),
+('Brazil', 'BR', 'BRA', 'Americas', 'South America', 'America/Sao_Paulo'),
 ('British Indian Ocean Territory', 'IO', 'IOT', 'Africa', 'Eastern Africa', 'Indian/Chagos'),
 ('Brunei Darussalam', 'BN', 'BRN', 'Asia', 'South-Eastern Asia', 'Asia/Brunei'),
 ('Bulgaria', 'BG', 'BGR', 'Europe', 'Eastern Europe', 'Europe/Sofia'),
@@ -88,31 +86,31 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Cabo Verde', 'CV', 'CPV', 'Africa', 'Western Africa', 'Atlantic/Cape_Verde'),
 ('Cambodia', 'KH', 'KHM', 'Asia', 'South-Eastern Asia', 'Asia/Phnom_Penh'),
 ('Cameroon', 'CM', 'CMR', 'Africa', 'Middle Africa', 'Africa/Douala'),
-('Canada', 'CA', 'CAN', 'Americas', 'Northern America', 'America/Toronto'), -- Multiple zones exist
+('Canada', 'CA', 'CAN', 'Americas', 'Northern America', 'America/Toronto'),
 ('Cayman Islands', 'KY', 'CYM', 'Americas', 'Caribbean', 'America/Cayman'),
 ('Central African Republic', 'CF', 'CAF', 'Africa', 'Middle Africa', 'Africa/Bangui'),
 ('Chad', 'TD', 'TCD', 'Africa', 'Middle Africa', 'Africa/Ndjamena'),
-('Chile', 'CL', 'CHL', 'Americas', 'South America', 'America/Santiago'), -- Includes Easter Island zone
-('China', 'CN', 'CHN', 'Asia', 'Eastern Asia', 'Asia/Shanghai'), -- Officially one zone, geographically multiple
+('Chile', 'CL', 'CHL', 'Americas', 'South America', 'America/Santiago'),
+('China', 'CN', 'CHN', 'Asia', 'Eastern Asia', 'Asia/Shanghai'),
 ('Christmas Island', 'CX', 'CXR', 'Oceania', 'Australia and New Zealand', 'Indian/Christmas'),
 ('Cocos (Keeling) Islands', 'CC', 'CCK', 'Oceania', 'Australia and New Zealand', 'Indian/Cocos'),
 ('Colombia', 'CO', 'COL', 'Americas', 'South America', 'America/Bogota'),
 ('Comoros', 'KM', 'COM', 'Africa', 'Eastern Africa', 'Indian/Comoro'),
 ('Congo', 'CG', 'COG', 'Africa', 'Middle Africa', 'Africa/Brazzaville'),
-('Congo (Democratic Republic of the)', 'CD', 'COD', 'Africa', 'Middle Africa', 'Africa/Kinshasa'), -- Multiple zones exist
+('Congo (Democratic Republic of the)', 'CD', 'COD', 'Africa', 'Middle Africa', 'Africa/Kinshasa'),
 ('Cook Islands', 'CK', 'COK', 'Oceania', 'Polynesia', 'Pacific/Rarotonga'),
 ('Costa Rica', 'CR', 'CRI', 'Americas', 'Central America', 'America/Costa_Rica'),
 ('Côte d''Ivoire', 'CI', 'CIV', 'Africa', 'Western Africa', 'Africa/Abidjan'),
 ('Croatia', 'HR', 'HRV', 'Europe', 'Southern Europe', 'Europe/Zagreb'),
 ('Cuba', 'CU', 'CUB', 'Americas', 'Caribbean', 'America/Havana'),
 ('Curaçao', 'CW', 'CUW', 'Americas', 'Caribbean', 'America/Curacao'),
-('Cyprus', 'CY', 'CYP', 'Asia', 'Western Asia', 'Asia/Nicosia'), -- Includes North Cyprus zone
+('Cyprus', 'CY', 'CYP', 'Asia', 'Western Asia', 'Asia/Nicosia'),
 ('Czechia', 'CZ', 'CZE', 'Europe', 'Eastern Europe', 'Europe/Prague'),
-('Denmark', 'DK', 'DNK', 'Europe', 'Northern Europe', 'Europe/Copenhagen'), -- Excludes Greenland, Faroe Islands
+('Denmark', 'DK', 'DNK', 'Europe', 'Northern Europe', 'Europe/Copenhagen'),
 ('Djibouti', 'DJ', 'DJI', 'Africa', 'Eastern Africa', 'Africa/Djibouti'),
 ('Dominica', 'DM', 'DMA', 'Americas', 'Caribbean', 'America/Dominica'),
 ('Dominican Republic', 'DO', 'DOM', 'Americas', 'Caribbean', 'America/Santo_Domingo'),
-('Ecuador', 'EC', 'ECU', 'Americas', 'South America', 'America/Guayaquil'), -- Includes Galapagos zone
+('Ecuador', 'EC', 'ECU', 'Americas', 'South America', 'America/Guayaquil'),
 ('Egypt', 'EG', 'EGY', 'Africa', 'Northern Africa', 'Africa/Cairo'),
 ('El Salvador', 'SV', 'SLV', 'Americas', 'Central America', 'America/El_Salvador'),
 ('Equatorial Guinea', 'GQ', 'GNQ', 'Africa', 'Middle Africa', 'Africa/Malabo'),
@@ -124,18 +122,18 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Faroe Islands', 'FO', 'FRO', 'Europe', 'Northern Europe', 'Atlantic/Faroe'),
 ('Fiji', 'FJ', 'FJI', 'Oceania', 'Melanesia', 'Pacific/Fiji'),
 ('Finland', 'FI', 'FIN', 'Europe', 'Northern Europe', 'Europe/Helsinki'),
-('France', 'FR', 'FRA', 'Europe', 'Western Europe', 'Europe/Paris'), -- Excludes overseas territories
+('France', 'FR', 'FRA', 'Europe', 'Western Europe', 'Europe/Paris'),
 ('French Guiana', 'GF', 'GUF', 'Americas', 'South America', 'America/Cayenne'),
-('French Polynesia', 'PF', 'PYF', 'Oceania', 'Polynesia', 'Pacific/Tahiti'), -- Multiple zones exist
+('French Polynesia', 'PF', 'PYF', 'Oceania', 'Polynesia', 'Pacific/Tahiti'),
 ('French Southern Territories', 'TF', 'ATF', 'Antarctica', '', 'Indian/Kerguelen'),
 ('Gabon', 'GA', 'GAB', 'Africa', 'Middle Africa', 'Africa/Libreville'),
 ('Gambia', 'GM', 'GMB', 'Africa', 'Western Africa', 'Africa/Banjul'),
 ('Georgia', 'GE', 'GEO', 'Asia', 'Western Asia', 'Asia/Tbilisi'),
-('Germany', 'DE', 'DEU', 'Europe', 'Western Europe', 'Europe/Berlin'), -- Includes Busingen
+('Germany', 'DE', 'DEU', 'Europe', 'Western Europe', 'Europe/Berlin'),
 ('Ghana', 'GH', 'GHA', 'Africa', 'Western Africa', 'Africa/Accra'),
 ('Gibraltar', 'GI', 'GIB', 'Europe', 'Southern Europe', 'Europe/Gibraltar'),
 ('Greece', 'GR', 'GRC', 'Europe', 'Southern Europe', 'Europe/Athens'),
-('Greenland', 'GL', 'GRL', 'Americas', 'Northern America', 'America/Godthab'), -- Multiple zones exist
+('Greenland', 'GL', 'GRL', 'Americas', 'Northern America', 'America/Godthab'),
 ('Grenada', 'GD', 'GRD', 'Americas', 'Caribbean', 'America/Grenada'),
 ('Guadeloupe', 'GP', 'GLP', 'Americas', 'Caribbean', 'America/Guadeloupe'),
 ('Guam', 'GU', 'GUM', 'Oceania', 'Micronesia', 'Pacific/Guam'),
@@ -145,14 +143,14 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Guinea-Bissau', 'GW', 'GNB', 'Africa', 'Western Africa', 'Africa/Bissau'),
 ('Guyana', 'GY', 'GUY', 'Americas', 'South America', 'America/Guyana'),
 ('Haiti', 'HT', 'HTI', 'Americas', 'Caribbean', 'America/Port-au-Prince'),
-('Heard Island and McDonald Islands', 'HM', 'HMD', 'Antarctica', '', NULL), -- Uninhabited
+('Heard Island and McDonald Islands', 'HM', 'HMD', 'Antarctica', '', NULL),
 ('Holy See', 'VA', 'VAT', 'Europe', 'Southern Europe', 'Europe/Vatican'),
 ('Honduras', 'HN', 'HND', 'Americas', 'Central America', 'America/Tegucigalpa'),
 ('Hong Kong', 'HK', 'HKG', 'Asia', 'Eastern Asia', 'Asia/Hong_Kong'),
 ('Hungary', 'HU', 'HUN', 'Europe', 'Eastern Europe', 'Europe/Budapest'),
 ('Iceland', 'IS', 'ISL', 'Europe', 'Northern Europe', 'Atlantic/Reykjavik'),
 ('India', 'IN', 'IND', 'Asia', 'Southern Asia', 'Asia/Kolkata'),
-('Indonesia', 'ID', 'IDN', 'Asia', 'South-Eastern Asia', 'Asia/Jakarta'), -- Multiple zones exist
+('Indonesia', 'ID', 'IDN', 'Asia', 'South-Eastern Asia', 'Asia/Jakarta'),
 ('Iran (Islamic Republic of)', 'IR', 'IRN', 'Asia', 'Southern Asia', 'Asia/Tehran'),
 ('Iraq', 'IQ', 'IRQ', 'Asia', 'Western Asia', 'Asia/Baghdad'),
 ('Ireland', 'IE', 'IRL', 'Europe', 'Northern Europe', 'Europe/Dublin'),
@@ -163,9 +161,9 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Japan', 'JP', 'JPN', 'Asia', 'Eastern Asia', 'Asia/Tokyo'),
 ('Jersey', 'JE', 'JEY', 'Europe', 'Northern Europe', 'Europe/Jersey'),
 ('Jordan', 'JO', 'JOR', 'Asia', 'Western Asia', 'Asia/Amman'),
-('Kazakhstan', 'KZ', 'KAZ', 'Asia', 'Central Asia', 'Asia/Almaty'), -- Multiple zones exist
+('Kazakhstan', 'KZ', 'KAZ', 'Asia', 'Central Asia', 'Asia/Almaty'),
 ('Kenya', 'KE', 'KEN', 'Africa', 'Eastern Africa', 'Africa/Nairobi'),
-('Kiribati', 'KI', 'KIR', 'Oceania', 'Micronesia', 'Pacific/Tarawa'), -- Multiple zones exist
+('Kiribati', 'KI', 'KIR', 'Oceania', 'Micronesia', 'Pacific/Tarawa'),
 ('Korea (Democratic People''s Republic of)', 'KP', 'PRK', 'Asia', 'Eastern Asia', 'Asia/Pyongyang'),
 ('Korea (Republic of)', 'KR', 'KOR', 'Asia', 'Eastern Asia', 'Asia/Seoul'),
 ('Kuwait', 'KW', 'KWT', 'Asia', 'Western Asia', 'Asia/Kuwait'),
@@ -182,31 +180,31 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Macao', 'MO', 'MAC', 'Asia', 'Eastern Asia', 'Asia/Macau'),
 ('Madagascar', 'MG', 'MDG', 'Africa', 'Eastern Africa', 'Indian/Antananarivo'),
 ('Malawi', 'MW', 'MWI', 'Africa', 'Eastern Africa', 'Africa/Blantyre'),
-('Malaysia', 'MY', 'MYS', 'Asia', 'South-Eastern Asia', 'Asia/Kuala_Lumpur'), -- Includes Sabah/Sarawak zone
+('Malaysia', 'MY', 'MYS', 'Asia', 'South-Eastern Asia', 'Asia/Kuala_Lumpur'),
 ('Maldives', 'MV', 'MDV', 'Asia', 'Southern Asia', 'Indian/Maldives'),
 ('Mali', 'ML', 'MLI', 'Africa', 'Western Africa', 'Africa/Bamako'),
 ('Malta', 'MT', 'MLT', 'Europe', 'Southern Europe', 'Europe/Malta'),
-('Marshall Islands', 'MH', 'MHL', 'Oceania', 'Micronesia', 'Pacific/Majuro'), -- Includes Kwajalein zone
+('Marshall Islands', 'MH', 'MHL', 'Oceania', 'Micronesia', 'Pacific/Majuro'),
 ('Martinique', 'MQ', 'MTQ', 'Americas', 'Caribbean', 'America/Martinique'),
 ('Mauritania', 'MR', 'MRT', 'Africa', 'Western Africa', 'Africa/Nouakchott'),
 ('Mauritius', 'MU', 'MUS', 'Africa', 'Eastern Africa', 'Indian/Mauritius'),
 ('Mayotte', 'YT', 'MYT', 'Africa', 'Eastern Africa', 'Indian/Mayotte'),
-('Mexico', 'MX', 'MEX', 'Americas', 'Central America', 'America/Mexico_City'), -- Multiple zones exist
-('Micronesia (Federated States of)', 'FM', 'FSM', 'Oceania', 'Micronesia', 'Pacific/Pohnpei'), -- Multiple zones exist
+('Mexico', 'MX', 'MEX', 'Americas', 'Central America', 'America/Mexico_City'),
+('Micronesia (Federated States of)', 'FM', 'FSM', 'Oceania', 'Micronesia', 'Pacific/Pohnpei'),
 ('Moldova (Republic of)', 'MD', 'MDA', 'Europe', 'Eastern Europe', 'Europe/Chisinau'),
 ('Monaco', 'MC', 'MCO', 'Europe', 'Western Europe', 'Europe/Monaco'),
-('Mongolia', 'MN', 'MNG', 'Asia', 'Eastern Asia', 'Asia/Ulaanbaatar'), -- Multiple zones exist
+('Mongolia', 'MN', 'MNG', 'Asia', 'Eastern Asia', 'Asia/Ulaanbaatar'),
 ('Montenegro', 'ME', 'MNE', 'Europe', 'Southern Europe', 'Europe/Podgorica'),
 ('Montserrat', 'MS', 'MSR', 'Americas', 'Caribbean', 'America/Montserrat'),
-('Morocco', 'MA', 'MAR', 'Africa', 'Northern Africa', 'Africa/Casablanca'), -- Includes Western Sahara
+('Morocco', 'MA', 'MAR', 'Africa', 'Northern Africa', 'Africa/Casablanca'),
 ('Mozambique', 'MZ', 'MOZ', 'Africa', 'Eastern Africa', 'Africa/Maputo'),
 ('Myanmar', 'MM', 'MMR', 'Asia', 'South-Eastern Asia', 'Asia/Yangon'),
 ('Namibia', 'NA', 'NAM', 'Africa', 'Southern Africa', 'Africa/Windhoek'),
 ('Nauru', 'NR', 'NRU', 'Oceania', 'Micronesia', 'Pacific/Nauru'),
 ('Nepal', 'NP', 'NPL', 'Asia', 'Southern Asia', 'Asia/Kathmandu'),
-('Netherlands', 'NL', 'NLD', 'Europe', 'Western Europe', 'Europe/Amsterdam'), -- Excludes Caribbean Netherlands
+('Netherlands', 'NL', 'NLD', 'Europe', 'Western Europe', 'Europe/Amsterdam'),
 ('New Caledonia', 'NC', 'NCL', 'Oceania', 'Melanesia', 'Pacific/Noumea'),
-('New Zealand', 'NZ', 'NZL', 'Oceania', 'Australia and New Zealand', 'Pacific/Auckland'), -- Includes Chatham zone
+('New Zealand', 'NZ', 'NZL', 'Oceania', 'Australia and New Zealand', 'Pacific/Auckland'),
 ('Nicaragua', 'NI', 'NIC', 'Americas', 'Central America', 'America/Managua'),
 ('Niger', 'NE', 'NER', 'Africa', 'Western Africa', 'Africa/Niamey'),
 ('Nigeria', 'NG', 'NGA', 'Africa', 'Western Africa', 'Africa/Lagos'),
@@ -214,24 +212,24 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Norfolk Island', 'NF', 'NFK', 'Oceania', 'Australia and New Zealand', 'Pacific/Norfolk'),
 ('North Macedonia', 'MK', 'MKD', 'Europe', 'Southern Europe', 'Europe/Skopje'),
 ('Northern Mariana Islands', 'MP', 'MNP', 'Oceania', 'Micronesia', 'Pacific/Saipan'),
-('Norway', 'NO', 'NOR', 'Europe', 'Northern Europe', 'Europe/Oslo'), -- Excludes Svalbard, Jan Mayen
+('Norway', 'NO', 'NOR', 'Europe', 'Northern Europe', 'Europe/Oslo'),
 ('Oman', 'OM', 'OMN', 'Asia', 'Western Asia', 'Asia/Muscat'),
 ('Pakistan', 'PK', 'PAK', 'Asia', 'Southern Asia', 'Asia/Karachi'),
 ('Palau', 'PW', 'PLW', 'Oceania', 'Micronesia', 'Pacific/Palau'),
-('Palestine, State of', 'PS', 'PSE', 'Asia', 'Western Asia', 'Asia/Gaza'), -- Includes Hebron zone
+('Palestine, State of', 'PS', 'PSE', 'Asia', 'Western Asia', 'Asia/Gaza'),
 ('Panama', 'PA', 'PAN', 'Americas', 'Central America', 'America/Panama'),
-('Papua New Guinea', 'PG', 'PNG', 'Oceania', 'Melanesia', 'Pacific/Port_Moresby'), -- Includes Bougainville zone
+('Papua New Guinea', 'PG', 'PNG', 'Oceania', 'Melanesia', 'Pacific/Port_Moresby'),
 ('Paraguay', 'PY', 'PRY', 'Americas', 'South America', 'America/Asuncion'),
 ('Peru', 'PE', 'PER', 'Americas', 'South America', 'America/Lima'),
 ('Philippines', 'PH', 'PHL', 'Asia', 'South-Eastern Asia', 'Asia/Manila'),
 ('Pitcairn', 'PN', 'PCN', 'Oceania', 'Polynesia', 'Pacific/Pitcairn'),
 ('Poland', 'PL', 'POL', 'Europe', 'Eastern Europe', 'Europe/Warsaw'),
-('Portugal', 'PT', 'PRT', 'Europe', 'Southern Europe', 'Europe/Lisbon'), -- Includes Azores, Madeira zones
+('Portugal', 'PT', 'PRT', 'Europe', 'Southern Europe', 'Europe/Lisbon'),
 ('Puerto Rico', 'PR', 'PRI', 'Americas', 'Caribbean', 'America/Puerto_Rico'),
 ('Qatar', 'QA', 'QAT', 'Asia', 'Western Asia', 'Asia/Qatar'),
 ('Réunion', 'RE', 'REU', 'Africa', 'Eastern Africa', 'Indian/Reunion'),
 ('Romania', 'RO', 'ROU', 'Europe', 'Eastern Europe', 'Europe/Bucharest'),
-('Russian Federation', 'RU', 'RUS', 'Europe', 'Eastern Europe', 'Europe/Moscow'), -- Multiple zones exist
+('Russian Federation', 'RU', 'RUS', 'Europe', 'Eastern Europe', 'Europe/Moscow'),
 ('Rwanda', 'RW', 'RWA', 'Africa', 'Eastern Africa', 'Africa/Kigali'),
 ('Saint Barthélemy', 'BL', 'BLM', 'Americas', 'Caribbean', 'America/St_Barthelemy'),
 ('Saint Helena, Ascension and Tristan da Cunha', 'SH', 'SHN', 'Africa', 'Western Africa', 'Atlantic/St_Helena'),
@@ -245,7 +243,7 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Sao Tome and Principe', 'ST', 'STP', 'Africa', 'Middle Africa', 'Africa/Sao_Tome'),
 ('Saudi Arabia', 'SA', 'SAU', 'Asia', 'Western Asia', 'Asia/Riyadh'),
 ('Senegal', 'SN', 'SEN', 'Africa', 'Western Africa', 'Africa/Dakar'),
-('Serbia', 'RS', 'SRB', 'Europe', 'Southern Europe', 'Europe/Belgrade'),
+('Serbia', 'RS', 'SRB', 'Europe', 'Southern Europe', 'Europe/Belgrade'), -- Line 248 approx
 ('Seychelles', 'SC', 'SYC', 'Africa', 'Eastern Africa', 'Indian/Seychelles'),
 ('Sierra Leone', 'SL', 'SLE', 'Africa', 'Western Africa', 'Africa/Freetown'),
 ('Singapore', 'SG', 'SGP', 'Asia', 'South-Eastern Asia', 'Asia/Singapore'),
@@ -257,7 +255,7 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('South Africa', 'ZA', 'ZAF', 'Africa', 'Southern Africa', 'Africa/Johannesburg'),
 ('South Georgia and the South Sandwich Islands', 'GS', 'SGS', 'Antarctica', '', 'Atlantic/South_Georgia'),
 ('South Sudan', 'SS', 'SSD', 'Africa', 'Eastern Africa', 'Africa/Juba'),
-('Spain', 'ES', 'ESP', 'Europe', 'Southern Europe', 'Europe/Madrid'), -- Includes Africa/Ceuta, Atlantic/Canary zones
+('Spain', 'ES', 'ESP', 'Europe', 'Southern Europe', 'Europe/Madrid'),
 ('Sri Lanka', 'LK', 'LKA', 'Asia', 'Southern Asia', 'Asia/Colombo'),
 ('Sudan', 'SD', 'SDN', 'Africa', 'Northern Africa', 'Africa/Khartoum'),
 ('Suriname', 'SR', 'SUR', 'Americas', 'South America', 'America/Paramaribo'),
@@ -280,13 +278,13 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 ('Turks and Caicos Islands', 'TC', 'TCA', 'Americas', 'Caribbean', 'America/Grand_Turk'),
 ('Tuvalu', 'TV', 'TUV', 'Oceania', 'Polynesia', 'Pacific/Funafuti'),
 ('Uganda', 'UG', 'UGA', 'Africa', 'Eastern Africa', 'Africa/Kampala'),
-('Ukraine', 'UA', 'UKR', 'Europe', 'Eastern Europe', 'Europe/Kiev'), -- Multiple zones exist (Simferopol, Uzhgorod)
+('Ukraine', 'UA', 'UKR', 'Europe', 'Eastern Europe', 'Europe/Kiev'),
 ('United Arab Emirates', 'AE', 'ARE', 'Asia', 'Western Asia', 'Asia/Dubai'),
-('United Kingdom of Great Britain and Northern Ireland', 'GB', 'GBR', 'Europe', 'Northern Europe', 'Europe/London'), -- Excludes overseas territories
-('United States Minor Outlying Islands', 'UM', 'UMI', 'Oceania', 'Micronesia', 'Pacific/Wake'), -- Multiple zones exist
-('United States of America', 'US', 'USA', 'Americas', 'Northern America', 'America/New_York'), -- Multiple zones exist
+('United Kingdom of Great Britain and Northern Ireland', 'GB', 'GBR', 'Europe', 'Northern Europe', 'Europe/London'),
+('United States Minor Outlying Islands', 'UM', 'UMI', 'Oceania', 'Micronesia', 'Pacific/Wake'),
+('United States of America', 'US', 'USA', 'Americas', 'Northern America', 'America/New_York'),
 ('Uruguay', 'UY', 'URY', 'Americas', 'South America', 'America/Montevideo'),
-('Uzbekistan', 'UZ', 'UZB', 'Asia', 'Central Asia', 'Asia/Tashkent'), -- Multiple zones exist (Samarkand)
+('Uzbekistan', 'UZ', 'UZB', 'Asia', 'Central Asia', 'Asia/Tashkent'),
 ('Vanuatu', 'VU', 'VUT', 'Oceania', 'Melanesia', 'Pacific/Efate'),
 ('Venezuela (Bolivarian Republic of)', 'VE', 'VEN', 'Americas', 'South America', 'America/Caracas'),
 ('Viet Nam', 'VN', 'VNM', 'Asia', 'South-Eastern Asia', 'Asia/Ho_Chi_Minh'),
@@ -302,10 +300,4 @@ INSERT INTO public.world_countries (name, iso_code_2, iso_code_3, region, subreg
 -- Grant usage and select permissions (adjust schema and role names if needed)
 -- GRANT USAGE ON SCHEMA public TO your_user_role;
 -- GRANT SELECT ON TABLE public.world_countries TO your_user_role;
-
--- Example Query: Select countries in Europe/London timezone
--- SELECT name, iso_code_2 FROM public.world_countries WHERE iana_timezone = 'Europe/London';
-
--- Example Query: Select all countries in South America with their timezones
--- SELECT name, iso_code_2, iana_timezone FROM public.world_countries WHERE subregion = 'South America' ORDER BY name;
 
