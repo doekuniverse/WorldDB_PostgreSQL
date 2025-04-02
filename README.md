@@ -2,7 +2,8 @@
 
 Este repositorio contiene una base de datos completa con información de países y ciudades de todo el mundo. La base de datos está estructurada en SQL y está diseñada para ser fácilmente integrable en cualquier proyecto que necesite datos geográficos.
 
-![image_fx (1)](https://github.com/user-attachments/assets/0a12e3e1-8337-48ed-a603-7e82a724b65c)
+![image_fx](https://github.com/user-attachments/assets/1288e2b9-7867-4016-b3db-abf633f7680b)
+
 
 ## 📋 Características
 
